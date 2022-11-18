@@ -419,7 +419,29 @@ function CalculateTotalDMG()
 	if tempEthereal
 	then 
 		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.4 
-		Tinker.TotalMagicDamage = Tinker.TotalMagicDamage + (50 + (Hero.GetPrimaryAttribute(Tinker.NearestEnemyHero) * 1.5))
+		function findMainAtribute()
+			local MainAtribute
+			local Strength = Hero.GetStrengthTotal(Tinker.NearestEnemyHero)
+			local Intellect = Hero.GetIntellectTotal(Tinker.NearestEnemyHero)
+			local Agility = Hero.GetAgilityTotal(Tinker.NearestEnemyHero)
+
+			if Strength >= Intellect or Agility
+			then MainAtribute = Strength
+			else 
+			if Intellect >= Strength or Agility
+			then MainAtribute = Intellect
+			else 
+			if Agility >= Intellect or Strength
+			then MainAtribute = Agility
+			else 
+			end	
+		end
+	end
+	return MainAtribute
+end
+
+local MainAtribute = findMainAtribute()
+		Tinker.TotalMagicDamage = Tinker.TotalMagicDamage + (50 + (1.5 * MainAtribute))
 		Tinker.TotalManaCost = Tinker.TotalManaCost + Ability.GetManaCost(tempEthereal)
 	end
 
@@ -438,6 +460,32 @@ function CalculateTotalDMG()
 			Tinker.TotalManaCost = Tinker.TotalManaCost + Ability.GetManaCost(dagon)
 		end
     end	
+
+		local function findScepter()
+			local defaultScepter =  NPC.GetItem(Tinker.Hero, "item_ultimate_scepter", true)
+			local modScepter = NPC.HasModifier(Tinker.Hero, "modifier_item_ultimate_scepter_consumed")
+			local roshScepter = NPC.HasModifier(Tinker.Hero, "modifier_item_ultimate_scepter_roshan")
+			local aghanimScepter
+			if defaultScepter 
+			then aghanimScepter = defaultScepter
+			else 
+				if modScepter
+				then aghanimScepter = modScepter
+				else
+					if roshScepter
+					then aghanimScepter = roshScepter
+						end
+						end
+					end
+					return aghanimScepter
+				end
+
+
+		local aghanimScepter = findScepter()
+	if	aghanimScepter
+	then 
+		Tinker.TotalPureDamage = Tinker.TotalPureDamage + Entity.GetMaxHealth(Tinker.NearestEnemyHero) * 0.1
+	end
 		
 	if Ability.GetLevel(laser) > 0 then Tinker.TotalPureDamage = Tinker.TotalPureDamage + Ability.GetLevelSpecialValueFor(laser, "laser_damage") end
 	if Ability.GetLevel(uniqLaserBonus) == 1 then
@@ -640,7 +688,28 @@ function EulsEnemy()
 end
 
 function BlinkToBase()
-    local abilityBlink = NPC.GetItem(Tinker.Hero, "item_blink", true)
+	local	function findBink()
+		local abilityBlink
+		if NPC.GetItem(Tinker.Hero, "item_blink", true) ~= nil 
+		then 
+			abilityBlink = NPC.GetItem(Tinker.Hero, "item_blink", true)
+		else 
+			if NPC.GetItem(Tinker.Hero, "item_overwhelming_blink", true) ~= nil  
+			then abilityBlink = NPC.GetItem(Tinker.Hero, "item_overwhelming_blink", true)
+			else 
+			if NPC.GetItem(Tinker.Hero, "item_swift_blink", true) ~= nil 
+			then abilityBlink = NPC.GetItem(Tinker.Hero, "item_swift_blink", true)
+			else 
+			if NPC.GetItem(Tinker.Hero, "item_arcane_blink", true) ~= nil 
+			then abilityBlink = NPC.GetItem(Tinker.Hero, "item_arcane_blink", true)
+			end 
+		end 
+	end 
+end
+return abilityBlink
+end
+
+    local abilityBlink = findBink()
 	if	abilityBlink 
 		and Ability.IsCastable(abilityBlink, Tinker.ManaPoint)
 		and Tinker.LastCastAbility ~= abilityBlink
@@ -662,7 +731,28 @@ function BlinkToBase()
 end
 
 function BlinkToMouse()
-    local abilityBlink = NPC.GetItem(Tinker.Hero, "item_blink", true)
+	local	function findBink()
+			local abilityBlink
+			if NPC.GetItem(Tinker.Hero, "item_blink", true) ~= nil 
+			then 
+				abilityBlink = NPC.GetItem(Tinker.Hero, "item_blink", true)
+			else 
+				if NPC.GetItem(Tinker.Hero, "item_overwhelming_blink", true) ~= nil  
+				then abilityBlink = NPC.GetItem(Tinker.Hero, "item_overwhelming_blink", true)
+				else 
+				if NPC.GetItem(Tinker.Hero, "item_swift_blink", true) ~= nil 
+				then abilityBlink = NPC.GetItem(Tinker.Hero, "item_swift_blink", true)
+				else 
+				if NPC.GetItem(Tinker.Hero, "item_arcane_blink", true) ~= nil 
+				then abilityBlink = NPC.GetItem(Tinker.Hero, "item_arcane_blink", true)
+				end 
+			end 
+		end 
+	end
+	return abilityBlink
+end
+
+local abilityBlink = findBink()
 	if	abilityBlink 
 		and Ability.IsCastable(abilityBlink, Tinker.ManaPoint)
 		and Tinker.LastCastAbility ~= abilityBlink
