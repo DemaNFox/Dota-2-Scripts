@@ -1057,7 +1057,28 @@ function Rearm()
 end
 
 function SafeTP()
-    local abilityBlink = NPC.GetItem(Tinker.Hero, "item_blink", true)
+	local	function findBink()
+		local abilityBlink
+		if NPC.GetItem(Tinker.Hero, "item_blink", true) ~= nil 
+		then 
+			abilityBlink = NPC.GetItem(Tinker.Hero, "item_blink", true)
+		else 
+			if NPC.GetItem(Tinker.Hero, "item_overwhelming_blink", true) ~= nil  
+			then abilityBlink = NPC.GetItem(Tinker.Hero, "item_overwhelming_blink", true)
+			else 
+			if NPC.GetItem(Tinker.Hero, "item_swift_blink", true) ~= nil 
+			then abilityBlink = NPC.GetItem(Tinker.Hero, "item_swift_blink", true)
+			else 
+			if NPC.GetItem(Tinker.Hero, "item_arcane_blink", true) ~= nil 
+			then abilityBlink = NPC.GetItem(Tinker.Hero, "item_arcane_blink", true)
+			end 
+		end 
+	end 
+end
+return abilityBlink
+end
+
+    local abilityBlink = findBink()
 	if	abilityBlink 
 		and Ability.IsCastable(abilityBlink, Tinker.ManaPoint)
 		and Tinker.LastCastAbility ~= abilityBlink
