@@ -1,7 +1,7 @@
 local Tinker = {}
 Tinker.IsEnabled = Menu.AddOption({ "Hero Specific","Tinker" }, "Enabled", "")
 Tinker.Version = Menu.AddOption({ "Hero Specific","Tinker" }, "Version", "- Bug fixes", 1,1,1)
-Menu.SetValueName(Tinker.Version, 1, "4.3.3 (reworked)")
+Menu.SetValueName(Tinker.Version, 1, "4.4")
 Tinker.DMGCalculator = Menu.AddOption({ "Hero Specific","Tinker", "Extra" }, "DMG Calculator", "", 1, 2)
 Menu.SetValueName(Tinker.DMGCalculator, 1, "Off")
 Menu.SetValueName(Tinker.DMGCalculator, 2, "Enabled - Bar")
