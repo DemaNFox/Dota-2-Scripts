@@ -271,10 +271,9 @@ function Tinker.OnDraw()
 	
 	if Menu.GetValue(Tinker.DMGCalculator) == 2 then
 		Renderer.SetDrawColor(0, 0, 0, 255)
-		Renderer.DrawFilledRect(0, 250, 200, 60)
+		Renderer.DrawFilledRect(0, 250, 120, 30)
 		Renderer.SetDrawColor(255, 255, 255, 255)
 		Renderer.DrawTextCenteredX(Tinker.FontDMG, 60, 257, "damage: " .. math.floor(Tinker.TotalDamage), 1)
-		Renderer.DrawTextCenteredX(Tinker.FontDMG, 103, 290, "damage (including ult): " .. math.floor(Tinker.ManaPoint / Tinker.TotalManaCost * Tinker.TotalDamage), 1)
 	end
 	
 	if not Menu.IsEnabled(Tinker.KillIndicator) then return true end
