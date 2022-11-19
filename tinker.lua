@@ -427,6 +427,36 @@ function CalculateTotalDMG()
 	then 
 		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.06
 	end
+	
+	local kaya = NPC.GetItem(Tinker.Hero, "item_kaya", true)
+	if kaya
+	then 
+		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.08
+	end
+
+	local bloodthorn = NPC.GetItem(Tinker.Hero, "item_bloodthorn", true)
+	if bloodthorn
+	then 
+		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.3
+	end
+
+	local kayaSange = NPC.GetItem(Tinker.Hero, "item_kaya_and_sange", true)
+	if kayaSange
+	then 
+		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.16
+	end
+
+	local kayaYasha = NPC.GetItem(Tinker.Hero, "item_yasha_and_kaya", true)
+	if Yasha
+	then 
+		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.16
+	end
+
+	local vambrace = NPC.GetItem(Tinker.Hero, "item_vambrace", true)
+	if vambrace
+	then 
+		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.06
+	end
 		
 	local tempEthereal = NPC.GetItem(Tinker.Hero, "item_ethereal_blade", true)
 	if tempEthereal
@@ -807,8 +837,6 @@ function Soul()
 		Tinker.NextTime = Tinker.CurrentTime + NetChannel.GetAvgLatency(Enum.Flow.FLOW_OUTGOING)
 		Tinker.StopAnimation = true
 	return end
-	local correntReduce = NPC.GetMagicalArmorDamageMultiplier(Tinker.NearestEnemyHero)
-	Chat.Print("ConsoleChat", correntReduce)
 end
 
 function Hex()
