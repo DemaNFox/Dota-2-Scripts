@@ -284,8 +284,6 @@ function Tinker.OnDraw()
 		Renderer.DrawTextCenteredX(Tinker.FontDMG, x, y - 28, "damage: " .. math.floor(Tinker.TotalDamage), 1)
 	end
 	
-	
-	
 	if not Menu.IsEnabled(Tinker.KillIndicator) then return true end
 
 	local fullDMG = math.floor(Tinker.ManaPoint / Tinker.TotalManaCost) * Tinker.TotalDamage
@@ -302,8 +300,8 @@ function Tinker.OnDraw()
 				local pos = Entity.GetAbsOrigin(hero)
 				local x, y, visible = Renderer.WorldToScreen(pos)
 				if visible then
-					Renderer.SetDrawColor(255, 0, 0, 255)
-					Renderer.DrawTextCentered(Tinker.FontKill, x, (y + 20), "*")
+					Renderer.SetDrawColor(0, 26, 255, 255)
+					Renderer.DrawTextCentered(Tinker.FontKill, x, (y + 60), "killable")
 				end
 			end
 		end
