@@ -56,11 +56,11 @@ Tinker.Items[20] =  "Delay (0.1s)"
 Tinker.Items[21] =  "Laser"
 Tinker.Items[22] =  "Rockets"
 Tinker.Items[23] =  "Matrix"
-Tinker.Items[24] =  "Rearm"
-Tinker.Items[25] =  "Safe Blink"
+Tinker.Items[24] =  "Warp Flare"
+Tinker.Items[25] =  "Rearm"
+Tinker.Items[26] =  "Safe Blink"
 
-Tinker.ItemsLength = 25
-
+Tinker.ItemsLength = 26
 -- Initialize
 
 Tinker.Orders = {}
@@ -593,18 +593,22 @@ function Tinker.ComboCast(cast, range)
 		Delay()
 	return end
 	
-	if cast == (Tinker.ItemsLength - 4) then 
+	if cast == (Tinker.ItemsLength - 5) then 
 		Laser()
 	return end
 	
-	if cast == (Tinker.ItemsLength - 3) then 
+	if cast == (Tinker.ItemsLength - 4) then 
 		Rockets()
 	return end
 	
-	if cast == (Tinker.ItemsLength - 2) then 
+	if cast == (Tinker.ItemsLength - 3) then 
 		Matrix()
 	return end
 	
+	if cast == (Tinker.ItemsLength - 2) then 
+		WarpFlare()
+	return end
+
 	if cast == (Tinker.ItemsLength - 1) then 
 		Rearm()
 	return end
@@ -977,6 +981,23 @@ function Matrix()
 		Tinker.LastCastAbility = abilityMatrix
 		Tinker.NextTime = Tinker.CurrentTime + Ability.GetCastPoint(abilityMatrix) + NetChannel.GetAvgLatency(Enum.Flow.FLOW_OUTGOING)
 	return end
+end
+
+function WarpFlare()
+	local abilityFlare = NPC.GetAbility(Tinker.Hero, 'tinker_warp_grenade')
+if not abilityFlare then return end
+
+if	Ability.IsCastable(abilityFlare, Tinker.ManaPoint)
+	and Tinker.NearestEnemyHero
+	and not NPC.HasState(Tinker.NearestEnemyHero, Enum.ModifierState.MODIFIER_STATE_MAGIC_IMMUNE)
+	and NPC.IsEntityInRange(Tinker.NearestEnemyHero, Tinker.Hero, Ability.GetCastRange(abilityFlare)) 
+	and Tinker.LastCastAbility ~= abilityFlare
+then 
+	Ability.CastTarget(abilityFlare, Tinker.NearestEnemyHero) 
+	Tinker.LastCastAbility = abilityFlare
+	Tinker.NextTime = Tinker.CurrentTime + Ability.GetCastPoint(abilityFlare) + 0.2 + NetChannel.GetAvgLatency(Enum.Flow.FLOW_OUTGOING)
+	Tinker.StopAnimation = true
+return end
 end
 
 function Rearm()
