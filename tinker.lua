@@ -826,8 +826,6 @@ function Soul()
 		Tinker.LastCastAbility = abilitySoul
 		Tinker.NextTime = Tinker.CurrentTime + NetChannel.GetAvgLatency(Enum.Flow.FLOW_OUTGOING)
 		Tinker.StopAnimation = true
-		local damage = NPC.GetMagicalArmorDamageMultiplier(Tinker.NearestEnemyHero)
-		Chat.Print("ConsoleChat", damage)
 	return end
 end
 
