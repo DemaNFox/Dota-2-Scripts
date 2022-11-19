@@ -271,22 +271,13 @@ function Tinker.OnDraw()
 	
 	if Menu.GetValue(Tinker.DMGCalculator) == 2 then
 		Renderer.SetDrawColor(0, 0, 0, 255)
-		Renderer.DrawFilledRect(0, 250, 120, 30)
+		Renderer.DrawFilledRect(0, 250, 200, 60)
 		Renderer.SetDrawColor(255, 255, 255, 255)
 		Renderer.DrawTextCenteredX(Tinker.FontDMG, 60, 257, "damage: " .. math.floor(Tinker.TotalDamage), 1)
-	end
-	
-	if Menu.GetValue(Tinker.DMGCalculator) == 3 then
-		local x, y = Input.GetCursorPos()
-		Renderer.SetDrawColor(0, 0, 0, 70)
-		Renderer.DrawFilledRect(x - 60, y - 35, 120, 30)
-		Renderer.SetDrawColor(255, 255, 255, 255)
-		Renderer.DrawTextCenteredX(Tinker.FontDMG, x, y - 28, "damage: " .. math.floor(Tinker.TotalDamage), 1)
+		Renderer.DrawTextCenteredX(Tinker.FontDMG, 103, 290, "damage (including ult): " .. math.floor(Tinker.ManaPoint / Tinker.TotalManaCost * Tinker.TotalDamage), 1)
 	end
 	
 	if not Menu.IsEnabled(Tinker.KillIndicator) then return true end
-
-	local fullDMG = math.floor(Tinker.ManaPoint / Tinker.TotalManaCost) * Tinker.TotalDamage
 	
 	for i = 1, Heroes.Count() do
 		local hero = Heroes.Get(i)
@@ -295,7 +286,7 @@ function Tinker.OnDraw()
 			and not Entity.IsDormant(hero)
 			then
 			local hp = Entity.GetHealth(hero)
-			local dmg = fullDMG
+			local dmg = Tinker.TotalDamage
 			if dmg > hp then
 				local pos = Entity.GetAbsOrigin(hero)
 				local x, y, visible = Renderer.WorldToScreen(pos)
@@ -836,6 +827,8 @@ function Soul()
 		Tinker.LastCastAbility = abilitySoul
 		Tinker.NextTime = Tinker.CurrentTime + NetChannel.GetAvgLatency(Enum.Flow.FLOW_OUTGOING)
 		Tinker.StopAnimation = true
+		local damage = NPC.GetMagicalArmorDamageMultiplier(Tinker.NearestEnemyHero)
+		Chat.Print("ConsoleChat", damage)
 	return end
 end
 
