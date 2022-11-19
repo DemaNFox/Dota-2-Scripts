@@ -295,7 +295,7 @@ function Tinker.OnDraw()
 			and not Entity.IsDormant(hero)
 			then
 			local hp = Entity.GetHealth(hero)
-			local dmg = fullDMG * NPC.GetMagicalArmorDamageMultiplier(hero)
+			local dmg = fullDMG
 			if dmg > hp then
 				local pos = Entity.GetAbsOrigin(hero)
 				local x, y, visible = Renderer.WorldToScreen(pos)
@@ -396,21 +396,36 @@ function CalculateTotalDMG()
 	Tinker.NearestEnemyHero = Input.GetNearestHeroToCursor(Entity.GetTeamNum(Tinker.Hero), Enum.TeamType.TEAM_ENEMY)	
 	if Tinker.NearestEnemyHero == nil then return end
 	local xfactor = 1
+	Tinker.TotalMagicFactor = xfactor
 
 	local laser = NPC.GetAbilityByIndex(Tinker.Hero, 0)
   local rocket = NPC.GetAbilityByIndex(Tinker.Hero, 1)
   local rearm = NPC.GetAbility(Tinker.Hero, 'tinker_rearm')
 	local uniqLaserBonus = NPC.GetAbilityByIndex(Tinker.Hero, 12)	
-		
-	xfactor = xfactor + ((Hero.GetIntellectTotal(Tinker.Hero) / 14) / 100)
-	
-	Tinker.TotalMagicFactor = xfactor
 	
 	local tempVeil = NPC.GetItem(Tinker.Hero, "item_veil_of_discord", true)
 	if tempVeil
 	then 
 		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.18
 		Tinker.TotalManaCost = Tinker.TotalManaCost + Ability.GetManaCost(tempVeil)
+	end
+
+	local timeRelic = NPC.GetItem(Tinker.Hero, "item_timeless_relic", false)
+	if timeRelic
+	then 
+		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.15
+	end
+	
+	local trinket = NPC.GetItem(Tinker.Hero, "item_mysterious_hat", false)
+	if trinket
+	then 
+		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.05
+	end
+
+	local shawl = NPC.GetItem(Tinker.Hero, "item_nether_shawl", false)
+	if shawl
+	then 
+		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.06
 	end
 		
 	local tempEthereal = NPC.GetItem(Tinker.Hero, "item_ethereal_blade", true)
@@ -499,7 +514,7 @@ local MainAtribute = findMainAtribute()
 	Tinker.TotalManaCost = Tinker.TotalManaCost + Ability.GetManaCost(rocket)
 	Tinker.TotalManaCost = Tinker.TotalManaCost + Ability.GetManaCost(rearm)
 	
-	Tinker.TotalDamage = ((Tinker.TotalMagicDamage -Tinker.TotalMagicDamage * 0.25) * Tinker.TotalMagicFactor) + Tinker.TotalPureDamage
+	Tinker.TotalDamage = Tinker.TotalMagicDamage * NPC.GetMagicalArmorDamageMultiplier(Tinker.NearestEnemyHero) * Tinker.TotalMagicFactor + Tinker.TotalPureDamage
 
 end
 
@@ -792,6 +807,8 @@ function Soul()
 		Tinker.NextTime = Tinker.CurrentTime + NetChannel.GetAvgLatency(Enum.Flow.FLOW_OUTGOING)
 		Tinker.StopAnimation = true
 	return end
+	local correntReduce = NPC.GetMagicalArmorDamageMultiplier(Tinker.NearestEnemyHero)
+	Chat.Print("ConsoleChat", correntReduce)
 end
 
 function Hex()
@@ -822,7 +839,7 @@ function Veil()
 		and Tinker.LastCastAbility ~= abilityVeil
 	then 
 		Ability.CastTarget(abilityVeil, Tinker.NearestEnemyHero) 
-		-- Ability.CastPosition(abilityVeil, Tinker.NearestEnemyHeroPos) 
+		Ability.CastPosition(abilityVeil, Tinker.NearestEnemyHeroPos) 
 		Tinker.LastCastAbility = abilityVeil
 		Tinker.NextTime = Tinker.CurrentTime + Ability.GetCastPoint(abilityVeil) + NetChannel.GetAvgLatency(Enum.Flow.FLOW_OUTGOING) + 0.1
 		Tinker.StopAnimation = true
