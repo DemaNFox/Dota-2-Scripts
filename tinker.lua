@@ -419,20 +419,24 @@ function CalculateTotalDMG()
 	if tempEthereal
 	then 
 		Tinker.TotalMagicFactor = Tinker.TotalMagicFactor + 0.4 
+
 		function findMainAtribute()
 			local MainAtribute
+			local mainAtributeVal = Hero.GetPrimaryAttribute(Tinker.NearestEnemyHero)
 			local Strength = Hero.GetStrengthTotal(Tinker.NearestEnemyHero)
 			local Intellect = Hero.GetIntellectTotal(Tinker.NearestEnemyHero)
 			local Agility = Hero.GetAgilityTotal(Tinker.NearestEnemyHero)
-
-			if Strength >= Intellect or Agility
-			then MainAtribute = Strength
+			if mainAtributeVal ==  0
+			then 
+				MainAtribute = Strength
 			else 
-			if Intellect >= Strength or Agility
-			then MainAtribute = Intellect
+				if mainAtributeVal ==  1
+			then 
+				MainAtribute = Agility
 			else 
-			if Agility >= Intellect or Strength
-			then MainAtribute = Agility
+				if mainAtributeVal ==  2
+			then 
+				MainAtribute = Intellect 				
 			else 
 			end	
 		end
@@ -464,7 +468,6 @@ local MainAtribute = findMainAtribute()
 		local function findScepter()
 			local defaultScepter =  NPC.GetItem(Tinker.Hero, "item_ultimate_scepter", true)
 			local modScepter = NPC.HasModifier(Tinker.Hero, "modifier_item_ultimate_scepter_consumed")
-			local roshScepter = NPC.HasModifier(Tinker.Hero, "modifier_item_ultimate_scepter_roshan")
 			local aghanimScepter
 			if defaultScepter 
 			then aghanimScepter = defaultScepter
@@ -910,7 +913,7 @@ function Dagon()
 		then 
 			Ability.CastTarget(abilityDagon, Tinker.NearestEnemyHero) 
 			Tinker.LastCastAbility = abilityDagon
-			Tinker.NextTime = Tinker.CurrentTime + NetChannel.GetAvgLatency(Enum.Flow.FLOW_OUTGOING)
+			Tinker.NextTime = Tinker.CurrentTime + 0.2 + NetChannel.GetAvgLatency(Enum.Flow.FLOW_OUTGOING)
 			Tinker.StopAnimation = true
 		return end
 	end
@@ -941,7 +944,7 @@ function Laser()
 	then 
 		Ability.CastTarget(abilityLaser, Tinker.NearestEnemyHero) 
 		Tinker.LastCastAbility = abilityLaser
-		Tinker.NextTime = Tinker.CurrentTime + Ability.GetCastPoint(abilityLaser) + 0.2 + NetChannel.GetAvgLatency(Enum.Flow.FLOW_OUTGOING)
+		Tinker.NextTime = Tinker.CurrentTime + Ability.GetCastPoint(abilityLaser) + 0.3 + NetChannel.GetAvgLatency(Enum.Flow.FLOW_OUTGOING)
 		Tinker.StopAnimation = true
 	return end
 end
