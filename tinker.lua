@@ -58,9 +58,9 @@ Tinker.Items[22] =  "Rockets"
 Tinker.Items[23] =  "Matrix"
 Tinker.Items[24] =  "Warp Flare"
 Tinker.Items[25] =  "Rearm"
-Tinker.Items[26] =  "Safe Blink"
+-- Tinker.Items[26] =  "Safe Blink"
 
-Tinker.ItemsLength = 26
+Tinker.ItemsLength = 25
 -- Initialize
 
 Tinker.Orders = {}
